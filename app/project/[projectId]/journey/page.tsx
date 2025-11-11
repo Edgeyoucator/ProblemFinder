@@ -260,19 +260,23 @@ export default function HorizontalCanvasJourney() {
     }
   }, [projectId])
 
-  // Save current step to Firestore
+  // Save current step to Firestore when user navigates
   useEffect(() => {
-    if (project && projectId) {
-      const currentStep = STEPS[currentStepIndex]
-      if (currentStep && project.currentStepId !== currentStep.id) {
-        const projectRef = doc(db, 'projects', projectId)
-        updateDoc(projectRef, {
-          currentStepId: currentStep.id,
-          updatedAt: new Date(),
-        })
+    const saveCurrentStep = async () => {
+      if (project && projectId) {
+        const currentStep = STEPS[currentStepIndex]
+        if (currentStep && project.currentStepId !== currentStep.id) {
+          const projectRef = doc(db, 'projects', projectId)
+          await updateDoc(projectRef, {
+            currentStepId: currentStep.id,
+            updatedAt: new Date(),
+          })
+        }
       }
     }
-  }, [currentStepIndex, project, projectId])
+    saveCurrentStep()
+    // Only depend on currentStepIndex - not project (avoids infinite loop)
+  }, [currentStepIndex, projectId])
 
   const goToPreviousStep = () => {
     if (currentStepIndex > 0) {
