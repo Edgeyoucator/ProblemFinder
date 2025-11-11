@@ -98,7 +98,7 @@ export interface FeedbackPoint {
  * Base assistant interface
  */
 export interface Assistant {
-  process(request: AIRequest, context: AIContext): Promise<AIResponse>
+  process(request: AIRequest, context: AIContext, promptTemplate: PromptTemplate): Promise<AIResponse>
 }
 
 /**

@@ -41,7 +41,7 @@ Focus your feedback on:
 
   userPromptTemplate: (context: AIContext) => {
     const chosenProblem = context.chosenProblem || 'the problem'
-    const answer = context.currentZoneData?.answer || ''
+    const answer = context.currentFieldData?.value || ''
 
     return `The student's chosen problem is: "${chosenProblem}".
 

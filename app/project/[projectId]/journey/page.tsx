@@ -33,14 +33,15 @@ interface ProjectData {
   currentStep: string
   currentStepId?: string
   problemStatement?: {
-    what: string
-    who: string
-    where: string
-    why: string
+    what: { answer: string; hasCheckedFeedback: boolean }
+    who: { answer: string; hasCheckedFeedback: boolean }
+    where: { answer: string; hasCheckedFeedback: boolean }
+    why: { answer: string; hasCheckedFeedback: boolean }
   }
   problemExploration?: any
   solutionWheel?: any
   coFounderLab?: any
+  decision?: any
   evaluateIt?: any
   measureIt?: any
   stakeholders?: any

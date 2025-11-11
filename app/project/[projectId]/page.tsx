@@ -518,7 +518,7 @@ export default function ProjectWorkspace() {
     setMessages(prev => [...prev, msg])
 
     setButtons([
-      { id: 'explore', label: `Explore more problems in ${project.passionTopic}`, type: 'action' },
+      { id: 'explore', label: `Explore more problems in ${project?.passionTopic || 'this area'}`, type: 'action' },
       { id: 'new_passion', label: 'Explore a different passion area', type: 'action' },
     ])
     setStage('next_action')
