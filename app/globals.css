@@ -1,0 +1,358 @@
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* CSS Variables for brand colors */
+:root {
+  --color-background: #162237;
+  --color-accent: #f15f24;
+  --color-secondary: #86dabd;
+  --color-text-primary: #e0e0e0;
+  --color-text-heading: #ffffff;
+  --glass-bg: rgba(22, 34, 55, 0.6);
+  --glass-border: rgba(134, 218, 189, 0.2);
+  --glass-edge: rgba(255, 255, 255, 0.12);
+  --glass-highlight: rgba(255, 255, 255, 0.08);
+  --glass-shadow: 0 8px 32px rgba(0,0,0,0.35);
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--color-background);
+  color: var(--color-text-primary);
+  letter-spacing: 0.02em;
+}
+
+body {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #162237 0%, #1a2940 100%);
+}
+
+/* Glass panel styling */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: 1.5rem;
+  box-shadow:
+    0 8px 32px 0 rgba(0, 0, 0, 0.37),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+}
+
+/* Elevated Apple-like glass card with sheen */
+.glass-card {
+  position: relative;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0) 60%),
+    radial-gradient(1200px 400px at -10% -20%, rgba(134,218,189,0.08), transparent 40%),
+    radial-gradient(800px 300px at 110% 0%, rgba(241,95,36,0.07), transparent 40%),
+    var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 1.25rem;
+  backdrop-filter: blur(18px) saturate(110%);
+  -webkit-backdrop-filter: blur(18px) saturate(110%);
+  box-shadow: var(--glass-shadow), inset 0 1px 0 0 var(--glass-edge);
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.glass-card::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -60%;
+  width: 120%;
+  height: 200%;
+  background: linear-gradient(120deg, transparent 30%, var(--glass-highlight) 50%, transparent 70%);
+  transform: translateX(-120%);
+  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.glass-card:hover::before {
+  transform: translateX(120%);
+}
+
+.glass-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.45), inset 0 1px 0 0 var(--glass-edge);
+}
+
+.glass-card[data-complete="true"] {
+  border-color: rgba(134, 218, 189, 0.55);
+  box-shadow:
+    0 14px 48px rgba(0,0,0,0.5),
+    0 0 24px rgba(134,218,189,0.25),
+    inset 0 1px 0 0 var(--glass-edge);
+  animation: pulseGlow 4s ease-in-out infinite alternate;
+}
+
+@keyframes pulseGlow {
+  0% { box-shadow: 0 14px 48px rgba(0,0,0,0.45), 0 0 16px rgba(134,218,189,0.18), inset 0 1px 0 0 var(--glass-edge); }
+  100% { box-shadow: 0 16px 54px rgba(0,0,0,0.5), 0 0 28px rgba(134,218,189,0.3), inset 0 1px 0 0 var(--glass-edge); }
+}
+
+/* Progress dots with glassy ring */
+.progress-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1px solid var(--glass-border);
+  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.35), rgba(255,255,255,0.05) 40%, transparent 60%), rgba(255,255,255,0.06);
+  box-shadow: inset 0 1px 0 0 var(--glass-edge);
+  transition: all 0.25s ease;
+}
+
+.progress-dot.done {
+  background: radial-gradient(circle at 40% 35%, rgba(255,255,255,0.6), rgba(255,255,255,0.08) 45%, transparent 60%), rgba(134,218,189,0.5);
+  border-color: rgba(134, 218, 189, 0.8);
+  box-shadow: 0 0 14px rgba(134,218,189,0.6), inset 0 1px 0 0 var(--glass-edge);
+}
+
+/* Decorative blurred background blobs for liquid look */
+.liquid-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.liquid-blob {
+  position: absolute;
+  filter: blur(40px);
+  opacity: 0.35;
+}
+
+.liquid-blob.orange { background: radial-gradient(600px 400px at 20% 10%, rgba(241,95,36,0.35), transparent 60%); }
+.liquid-blob.green { background: radial-gradient(700px 500px at 80% 0%, rgba(134,218,189,0.35), transparent 60%); }
+.liquid-blob.blue { background: radial-gradient(700px 500px at 50% 110%, rgba(80,140,255,0.15), transparent 60%); }
+
+/* Button styles */
+.btn {
+  padding: 0.875rem 2rem;
+  border: none;
+  border-radius: 1.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  letter-spacing: 0.03em;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--color-accent) 0%, #d94d1a 100%);
+  color: white;
+  box-shadow:
+    0 4px 20px rgba(241, 95, 36, 0.4),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.2);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 6px 28px rgba(241, 95, 36, 0.6),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.3);
+}
+
+.btn-secondary {
+  background: rgba(134, 218, 189, 0.15);
+  color: var(--color-secondary);
+  border: 1px solid rgba(134, 218, 189, 0.3);
+  box-shadow:
+    0 4px 20px rgba(134, 218, 189, 0.15),
+    inset 0 1px 0 0 rgba(134, 218, 189, 0.1);
+}
+
+.btn-secondary:hover {
+  background: rgba(134, 218, 189, 0.25);
+  transform: translateY(-2px);
+  box-shadow:
+    0 6px 28px rgba(134, 218, 189, 0.3),
+    inset 0 1px 0 0 rgba(134, 218, 189, 0.2);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+/* Chat message bubbles */
+.message-bubble {
+  padding: 1rem 1.5rem;
+  border-radius: 1.25rem;
+  margin: 0.75rem 0;
+  max-width: 85%;
+  position: relative;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.message-mentor {
+  background: rgba(241, 95, 36, 0.1);
+  border: 1px solid rgba(241, 95, 36, 0.3);
+  box-shadow: 0 4px 16px rgba(241, 95, 36, 0.15);
+  align-self: flex-start;
+}
+
+.message-student {
+  background: rgba(134, 218, 189, 0.1);
+  border: 1px solid rgba(134, 218, 189, 0.3);
+  box-shadow: 0 4px 16px rgba(134, 218, 189, 0.15);
+  align-self: flex-end;
+  margin-left: auto;
+}
+
+/* Input styling */
+.input-glass {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  background: rgba(22, 34, 55, 0.5);
+  border: 1px solid rgba(134, 218, 189, 0.3);
+  border-radius: 1.5rem;
+  color: var(--color-text-primary);
+  font-size: 1rem;
+  font-family: 'Inter', sans-serif;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.input-glass:focus {
+  border-color: var(--color-secondary);
+  box-shadow: 0 0 20px rgba(134, 218, 189, 0.3);
+  background: rgba(22, 34, 55, 0.7);
+}
+
+.input-glass::placeholder {
+  color: rgba(224, 224, 224, 0.5);
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--color-text-heading);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+h1 {
+  font-size: 2.5rem;
+  background: linear-gradient(135deg, var(--color-text-heading) 0%, var(--color-secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+h2 {
+  font-size: 1.75rem;
+  color: var(--color-secondary);
+}
+
+h3 {
+  font-size: 1.35rem;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(22, 34, 55, 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(134, 218, 189, 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(134, 218, 189, 0.5);
+}
+
+/* Loading spinner */
+.spinner {
+  border: 3px solid rgba(134, 218, 189, 0.2);
+  border-top: 3px solid var(--color-secondary);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Utility classes */
+.text-accent {
+  color: var(--color-accent);
+}
+
+.text-secondary {
+  color: var(--color-secondary);
+}
+
+.glow-accent {
+  text-shadow: 0 0 20px rgba(241, 95, 36, 0.6);
+}
+
+.glow-secondary {
+  text-shadow: 0 0 20px rgba(134, 218, 189, 0.6);
+}
+
+/* Modal overlay and content */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(22, 34, 55, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.modal-content {
+  max-width: 550px;
+  width: 90%;
+  padding: 2rem;
+  max-height: 85vh;
+  overflow-y: auto;
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install)",
+      "Bash(npm audit fix:*)",
+      "Bash(npm run dev:*)",
+      "Bash(npm install openai)",
+      "mcp__ide__getDiagnostics",
+      "Bash(taskkill:*)",
+      "Bash(cmd //c taskkill //PID 25904 //F)",
+      "Bash(cmd //c taskkill //PID 28480 //F)",
+      "Bash(npx kill-port 3000)",
+      "Bash(npx kill-port:*)",
+      "Bash(if exist .next rmdir /s /q .next)",
+      "Bash(git init:*)",
+      "Bash(git check-ignore:*)",
+      "Bash(git add:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
