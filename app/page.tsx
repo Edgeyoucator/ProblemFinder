@@ -9,15 +9,19 @@ export default function LandingPage() {
   const [isCreating, setIsCreating] = useState(false)
 
   const handleStartProject = async () => {
+    console.log('[handleStartProject] Button clicked');
     setIsCreating(true)
     try {
+      console.log('[handleStartProject] Calling createProject...');
       // Create new project in Firestore
       const projectId = await createProject()
+      console.log('[handleStartProject] Project created:', projectId);
 
       // Redirect to the project workspace
+      console.log('[handleStartProject] Navigating to project:', `/project/${projectId}`);
       router.push(`/project/${projectId}`)
     } catch (error) {
-      console.error('Error creating project:', error)
+      console.error('[handleStartProject] Error creating project:', error)
       alert('Failed to create project. Please try again.')
       setIsCreating(false)
     }

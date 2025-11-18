@@ -318,28 +318,6 @@ export default function FourWsStep({ projectId: propProjectId, project: propProj
 
   return (
     <div style={{ position: 'relative', width: '100vw', height: '100vh', overflow: 'hidden' }}>
-      {/* Page Title */}
-      <h1 style={{
-        position: 'absolute',
-        top: '2rem',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        zIndex: 100,
-        fontSize: '2.5rem',
-        fontWeight: 600,
-        background: 'linear-gradient(135deg, #ffffff 0%, #86dabd 100%)',
-        WebkitBackgroundClip: 'text',
-        WebkitTextFillColor: 'transparent',
-        backgroundClip: 'text',
-        textAlign: 'center',
-        margin: 0,
-        whiteSpace: 'nowrap',
-        letterSpacing: '0.02em',
-        lineHeight: 1.3,
-      }}>
-        Step 2: Defining the Problem
-      </h1>
-
       {/* Central Problem Card */}
       <div
         className="glass-panel"
