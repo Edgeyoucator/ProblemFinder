@@ -418,7 +418,7 @@ export default function ExploreStep({ onZoneFocusChange }: Partial<ExploreStepPr
     }}>
       {/* Breadcrumb Navigation */}
       <nav style={{
-        position: 'fixed',
+        position: 'absolute',
         top: '1.5rem',
         left: '2rem',
         zIndex: 100,
@@ -444,6 +444,28 @@ export default function ExploreStep({ onZoneFocusChange }: Partial<ExploreStepPr
         <span style={{ color: 'var(--color-accent)', fontWeight: 600 }}>Explore</span>
       </nav>
 
+      {/* Page Title */}
+      <h1 style={{
+        position: 'absolute',
+        top: '2rem',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        zIndex: 100,
+        fontSize: '2.5rem',
+        fontWeight: 600,
+        background: 'linear-gradient(135deg, #ffffff 0%, #86dabd 100%)',
+        WebkitBackgroundClip: 'text',
+        WebkitTextFillColor: 'transparent',
+        backgroundClip: 'text',
+        textAlign: 'center',
+        margin: 0,
+        whiteSpace: 'nowrap',
+        letterSpacing: '0.02em',
+        lineHeight: 1.3,
+      }}>
+        Step 1: What is the problem?
+      </h1>
+
       {/* Static Canvas Layout */}
       <div style={{
         position: 'relative',
@@ -462,8 +484,8 @@ export default function ExploreStep({ onZoneFocusChange }: Partial<ExploreStepPr
             top: '50%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
-            width: '350px',
-            padding: '2rem',
+            width: 'clamp(280px, 22vw, 400px)',
+            padding: 'clamp(1.5rem, 2vw, 2rem)',
             textAlign: 'center',
             background: 'var(--glass-bg)',
             border: '2px solid var(--color-accent)',
@@ -605,10 +627,10 @@ interface ZoneCardCornerProps {
 
 function ZoneCardCorner({ zoneId, config, data, isDimmed, onClick }: ZoneCardCornerProps) {
   const positionStyles = {
-    'top-left': { top: '20vh', left: '15vw' },
-    'top-right': { top: '20vh', right: '15vw' },
-    'bottom-left': { bottom: '20vh', left: '15vw' },
-    'bottom-right': { bottom: '20vh', right: '15vw' },
+    'top-left': { top: 'max(2rem, 15vh)', left: 'max(2rem, 12vw)' },
+    'top-right': { top: 'max(2rem, 15vh)', right: 'max(2rem, 12vw)' },
+    'bottom-left': { bottom: 'max(2rem, 15vh)', left: 'max(2rem, 12vw)' },
+    'bottom-right': { bottom: 'max(2rem, 15vh)', right: 'max(2rem, 12vw)' },
   }
 
   return (
@@ -618,8 +640,8 @@ function ZoneCardCorner({ zoneId, config, data, isDimmed, onClick }: ZoneCardCor
       style={{
         position: 'absolute',
         ...positionStyles[config.position],
-        width: '280px',
-        padding: '1.5rem',
+        width: 'clamp(220px, 18vw, 320px)',
+        padding: 'clamp(1rem, 1.5vw, 1.5rem)',
         cursor: 'pointer',
         transition: 'all 0.3s ease',
         background: `linear-gradient(135deg, var(--glass-bg), ${config.color})`,

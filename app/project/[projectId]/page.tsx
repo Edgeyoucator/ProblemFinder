@@ -64,6 +64,7 @@ export default function ProjectWorkspace() {
   const [showOtherInput, setShowOtherInput] = useState(false)
   const [otherInput, setOtherInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [isCommitting, setIsCommitting] = useState(false)
   const [confirmModal, setConfirmModal] = useState<{
     isOpen: boolean
     statement: string
@@ -562,23 +563,38 @@ export default function ProjectWorkspace() {
 
   // Choose a problem from the map
   const handleChooseProblem = async (statement: string) => {
-    await updateProject(projectId, {
-      chosenProblem: statement,
-      currentStep: 'explore',
-    })
+    setIsCommitting(true)
 
-    // Show success message
-    const msg: Message = {
-      role: 'mentor',
-      content: "Excellent! This will be your starting point for the Catalyst Change Project. Let's explore it deeper...",
-      timestamp: Date.now(),
+    try {
+      await updateProject(projectId, {
+        chosenProblem: statement,
+        currentStep: 'explore',
+      })
+
+      // Show success message
+      const msg: Message = {
+        role: 'mentor',
+        content: "Excellent! This will be your starting point for the Catalyst Change Project. Let's explore it deeper...",
+        timestamp: Date.now(),
+      }
+      setMessages(prev => [...prev, msg])
+
+      // Navigate to journey for horizontal navigation through steps
+      setTimeout(() => {
+        router.push(`/project/${projectId}/journey`)
+      }, 1500)
+    } catch (error) {
+      console.error('Error choosing problem:', error)
+      setIsCommitting(false)
+
+      // Show error message
+      const errorMsg: Message = {
+        role: 'mentor',
+        content: "Sorry, there was an error saving your choice. Please try again.",
+        timestamp: Date.now(),
+      }
+      setMessages(prev => [...prev, errorMsg])
     }
-    setMessages(prev => [...prev, msg])
-
-    // Navigate to journey for horizontal navigation through steps
-    setTimeout(() => {
-      router.push(`/project/${projectId}/journey`)
-    }, 1500)
   }
 
   if (loading) {
@@ -937,52 +953,93 @@ export default function ProjectWorkspace() {
               border: '1px solid rgba(134, 218, 189, 0.3)',
               borderRadius: '1rem',
               boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+              position: 'relative',
             }}
           >
-            <h3 style={{ marginBottom: '1rem', color: 'var(--color-accent)' }}>
-              Ready to commit to this problem?
-            </h3>
-
+            {/* Modal Content - gets blurred during commit */}
             <div style={{
-              padding: '1.25rem',
-              background: 'rgba(134, 218, 189, 0.08)',
-              border: '1px solid rgba(134, 218, 189, 0.2)',
-              borderRadius: '0.875rem',
-              marginBottom: '1.5rem',
-              lineHeight: '1.6'
+              filter: isCommitting ? 'blur(2px)' : 'none',
+              pointerEvents: isCommitting ? 'none' : 'auto',
+              transition: 'filter 0.3s ease',
             }}>
-              {confirmModal.statement}
+              <h3 style={{ marginBottom: '1rem', color: 'var(--color-accent)' }}>
+                Ready to commit to this problem?
+              </h3>
+
+              <div style={{
+                padding: '1.25rem',
+                background: 'rgba(134, 218, 189, 0.08)',
+                border: '1px solid rgba(134, 218, 189, 0.2)',
+                borderRadius: '0.875rem',
+                marginBottom: '1.5rem',
+                lineHeight: '1.6'
+              }}>
+                {confirmModal.statement}
+              </div>
+
+              <p style={{
+                marginBottom: '1.5rem',
+                color: 'var(--color-text-primary)',
+                opacity: 0.9,
+                lineHeight: '1.5'
+              }}>
+                This will become your Catalyst Change Project focus. You can always explore
+                more problems, but choosing this one will mark it as your primary project.
+              </p>
+
+              <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
+                <button
+                  onClick={() => setConfirmModal(null)}
+                  className="btn btn-secondary"
+                  style={{ padding: '0.75rem 1.5rem' }}
+                  disabled={isCommitting}
+                >
+                  Not yet
+                </button>
+                <button
+                  onClick={async () => {
+                    await handleChooseProblem(confirmModal.statement)
+                  }}
+                  className="btn btn-primary"
+                  style={{
+                    padding: '0.75rem 1.5rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                  }}
+                  disabled={isCommitting}
+                >
+                  {isCommitting ? (
+                    <>
+                      <div className="spinner" style={{ width: '16px', height: '16px', borderWidth: '2px' }}></div>
+                      <span>Committing...</span>
+                    </>
+                  ) : (
+                    'Yes, choose this problem'
+                  )}
+                </button>
+              </div>
             </div>
 
-            <p style={{
-              marginBottom: '1.5rem',
-              color: 'var(--color-text-primary)',
-              opacity: 0.9,
-              lineHeight: '1.5'
-            }}>
-              This will become your Catalyst Change Project focus. You can always explore
-              more problems, but choosing this one will mark it as your primary project.
-            </p>
-
-            <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
-              <button
-                onClick={() => setConfirmModal(null)}
-                className="btn btn-secondary"
-                style={{ padding: '0.75rem 1.5rem' }}
-              >
-                Not yet
-              </button>
-              <button
-                onClick={async () => {
-                  await handleChooseProblem(confirmModal.statement)
-                  setConfirmModal(null)
-                }}
-                className="btn btn-primary"
-                style={{ padding: '0.75rem 1.5rem' }}
-              >
-                Yes, choose this problem
-              </button>
-            </div>
+            {/* Loading Overlay - stays sharp, not blurred */}
+            {isCommitting && (
+              <div style={{
+                position: 'absolute',
+                inset: 0,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '1rem',
+                zIndex: 10,
+                pointerEvents: 'none',
+              }}>
+                <div className="spinner" style={{ width: '48px', height: '48px' }}></div>
+                <p style={{ color: 'var(--color-secondary)', fontWeight: 600, fontSize: '1.1rem' }}>
+                  Setting up your journey...
+                </p>
+              </div>
+            )}
           </div>
         </div>
       )}

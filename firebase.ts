@@ -13,6 +13,8 @@ import {
   getAuth,
   onAuthStateChanged,
   signInAnonymously,
+  setPersistence,
+  browserLocalPersistence,
   User,
 } from "firebase/auth";
 
@@ -30,6 +32,11 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const auth = getAuth(app);
+
+// Set auth persistence to LOCAL (persists across browser sessions)
+setPersistence(auth, browserLocalPersistence).catch((error) => {
+  console.error("Failed to set auth persistence:", error);
+});
 
 // Make sure every user (student) is at least anonymously authenticated
 export const ensureAuth = (): Promise<User> =>
@@ -80,11 +87,11 @@ export function subscribeToProject(
 
 // Update the project document
 export async function updateProject(projectId: string, partial: any) {
-  const user = await ensureAuth();
+  await ensureAuth(); // Ensure user is authenticated
   const ref = doc(db, "projects", projectId);
   await updateDoc(ref, {
     ...partial,
-    ownerId: user.uid,
+    // Don't update ownerId - preserve the original owner
     updatedAt: serverTimestamp(),
   });
 }
