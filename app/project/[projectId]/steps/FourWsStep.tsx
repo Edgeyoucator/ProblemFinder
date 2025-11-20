@@ -318,6 +318,34 @@ export default function FourWsStep({ projectId: propProjectId, project: propProj
 
   return (
     <div style={{ position: 'relative', width: '100vw', height: '100vh', overflow: 'hidden' }}>
+      {/* Liquid Background */}
+      <div className="liquid-bg">
+        <div className="liquid-blob orange" style={{ top: '-10%', left: '-10%', width: '60%', height: '60%' }} />
+        <div className="liquid-blob green" style={{ top: '-15%', right: '-10%', width: '60%', height: '60%' }} />
+      </div>
+
+      {/* Page Title */}
+      <h1 style={{
+        position: 'absolute',
+        top: '2rem',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        zIndex: 100,
+        fontSize: '2.5rem',
+        fontWeight: 600,
+        background: 'linear-gradient(135deg, #ffffff 0%, #86dabd 100%)',
+        WebkitBackgroundClip: 'text',
+        WebkitTextFillColor: 'transparent',
+        backgroundClip: 'text',
+        textAlign: 'center',
+        margin: 0,
+        whiteSpace: 'nowrap',
+        letterSpacing: '0.02em',
+        lineHeight: 1.3,
+      }}>
+        Step 2: What is the Problem?
+      </h1>
+
       {/* Central Problem Card */}
       <div
         className="glass-panel"
@@ -354,20 +382,33 @@ export default function FourWsStep({ projectId: propProjectId, project: propProj
             style={{
               position: 'absolute',
               ...positionStyles[config.position],
-              width: '280px',
-              padding: '1.5rem',
+              width: 'clamp(220px, 18vw, 320px)',
+              padding: 'clamp(1rem, 1.5vw, 1.5rem)',
               cursor: 'pointer',
               opacity: focusedZoneId && focusedZoneId !== key ? 0.3 : 1,
-              transition: 'all 0.3s ease-in-out',
-              borderLeft: `4px solid ${config.color.replace('0.2', '1')}`,
+              transition: 'all 0.3s ease',
+              background: `linear-gradient(135deg, var(--glass-bg), ${config.color})`,
+              pointerEvents: focusedZoneId && focusedZoneId !== key ? 'none' : 'auto',
+              display: 'flex',
+              flexDirection: 'column',
             }}
             onClick={() => openCard(zoneId)}
+            onMouseEnter={(e) => {
+              if (!focusedZoneId || focusedZoneId === key) {
+                e.currentTarget.style.transform = 'translateY(-5px)'
+                e.currentTarget.style.boxShadow = '0 12px 40px rgba(0, 0, 0, 0.5)'
+              }
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = ''
+              e.currentTarget.style.boxShadow = ''
+            }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-              <h3 style={{ fontSize: '1.2rem', fontWeight: 600 }}>{config.title}</h3>
+              <h3 style={{ color: 'var(--color-text-heading)', fontSize: '1.2rem', fontWeight: 600 }}>{config.title}</h3>
               {isComplete && <span style={{ color: 'var(--color-tertiary)', fontSize: '1.2rem' }}>✓</span>}
             </div>
-            <p style={{ fontSize: '0.9rem', opacity: 0.8, marginBottom: '0.75rem' }}>{config.question}</p>
+            <p style={{ fontSize: '0.85rem', opacity: 0.8, marginBottom: '0.75rem' }}>{config.question}</p>
             <p style={{
               fontSize: '0.85rem',
               opacity: hasContent ? 0.9 : 0.5,
