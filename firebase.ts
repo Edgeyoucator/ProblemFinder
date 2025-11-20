@@ -18,12 +18,12 @@ import {
 
 // --- Your Firebase configuration ---
 const firebaseConfig = {
-  apiKey: "AIzaSyDq03sg3rWGzb4Lb4fAn_qZCuVCObYNsVw",
-  authDomain: "problemfinder-test2.firebaseapp.com",
-  projectId: "problemfinder-test2",
-  storageBucket: "problemfinder-test2.firebasestorage.app",
-  messagingSenderId: "105667603764",
-  appId: "1:105667603764:web:3739eae8abdac6a3df8961",
+  apiKey: "AIzaSyD6QXDDSwuC1-aG0SA_tfw-tNYh3sI8dro",
+  authDomain: "changeproject-e02ab.firebaseapp.com",
+  projectId: "changeproject-e02ab",
+  storageBucket: "changeproject-e02ab.firebasestorage.app",
+  messagingSenderId: "779806329853",
+  appId: "1:779806329853:web:62898a18dd7d1af4456794",
 };
 // -----------------------------------
 

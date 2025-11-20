@@ -125,6 +125,7 @@ export default function StakeholderMapStep({ projectId, project: initialProject,
   const [focusedNode, setFocusedNode] = useState<NodeId | null>(null)
   const [isMounted, setIsMounted] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+  const hasInitialized = useRef(false)
 
   const actualProjectId = projectId || initialProject?.id
 
@@ -133,7 +134,35 @@ export default function StakeholderMapStep({ projectId, project: initialProject,
     if (!actualProjectId) return
     const unsub = subscribeToProject(actualProjectId, (p) => {
       setProject(p)
-      if (p?.stakeholders) setStakeholders(p.stakeholders)
+
+      // Only update stakeholders state on initial load, not on every Firestore update
+      if (!hasInitialized.current) {
+        if (p?.stakeholders) {
+          // Merge with EMPTY_STAKEHOLDERS to ensure all nodes exist
+          const merged = { ...EMPTY_STAKEHOLDERS }
+          if (p.stakeholders.nodes) {
+            Object.keys(merged.nodes).forEach((nodeId) => {
+              if (p.stakeholders.nodes[nodeId]) {
+                merged.nodes[nodeId as NodeId] = {
+                  ...EMPTY_STAKEHOLDERS.nodes[nodeId as NodeId],
+                  ...p.stakeholders.nodes[nodeId]
+                }
+              }
+            })
+          }
+          setStakeholders(merged)
+          hasInitialized.current = true
+        } else {
+          // Initialize stakeholders if it doesn't exist
+          console.log('[StakeholderMap] No stakeholders data found, initializing...')
+          updateProject(actualProjectId, { stakeholders: EMPTY_STAKEHOLDERS })
+            .then(() => {
+              console.log('[StakeholderMap] Initialized stakeholders')
+              hasInitialized.current = true
+            })
+            .catch((e) => console.error('[StakeholderMap] Failed to initialize:', e))
+        }
+      }
     })
     return () => { if (unsub) unsub() }
   }, [actualProjectId])
@@ -142,7 +171,13 @@ export default function StakeholderMapStep({ projectId, project: initialProject,
   const debounced = useDebounce(stakeholders, 800)
   useEffect(() => {
     if (!actualProjectId) return
-    updateProject(actualProjectId, { stakeholders: debounced }).catch((e) => console.error('save stakeholders failed', e))
+    console.log('[StakeholderMap] Saving stakeholders...', debounced)
+    updateProject(actualProjectId, { stakeholders: debounced })
+      .then(() => console.log('[StakeholderMap] Save successful'))
+      .catch((e) => {
+        console.error('[StakeholderMap] Save failed:', e)
+        alert('Failed to save stakeholders. Check console for details.')
+      })
   }, [debounced, actualProjectId])
 
   useEffect(() => {
